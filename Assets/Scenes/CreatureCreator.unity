@@ -402,6 +402,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 744503533}
+  lockPlayerControls: 0
   distance: 5
   xSpeed: 120
   ySpeed: 120

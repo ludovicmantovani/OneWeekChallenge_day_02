@@ -5,6 +5,7 @@ using UnityEngine;
 public class OrbitControls : MonoBehaviour
 {
     [SerializeField] private Transform target;
+    [SerializeField] private bool lockPlayerControls = false;
     [SerializeField] private float distance = 5.0f;
     [SerializeField] private float xSpeed = 120.0f;
     [SerializeField] private float ySpeed = 120.0f;
@@ -28,6 +29,8 @@ public class OrbitControls : MonoBehaviour
     private Quaternion _desiredRotation;
     private Vector3 _positionOffset;
     private Vector3 _initPosition;
+
+    public bool LockPlayerControls { get => lockPlayerControls; set => lockPlayerControls = value; }
 
     void Start()
     {
@@ -59,13 +62,13 @@ public class OrbitControls : MonoBehaviour
             return;
 
         // rotation de la caméra
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && !lockPlayerControls)
         {
             _xDeg += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
             _yDeg -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        if (Input.GetKeyDown(KeyCode.R) && !lockPlayerControls)
         {
             ResetPosition();
         }
@@ -82,7 +85,8 @@ public class OrbitControls : MonoBehaviour
         transform.rotation = _rotation;
 
         // zoom de la caméra molette souris
-        _desiredDistance -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
+        if (!lockPlayerControls)
+            _desiredDistance -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
         _desiredDistance = Mathf.Clamp(_desiredDistance, distanceMin, distanceMax);
 
         // calculer position
