@@ -10,44 +10,65 @@ public class GManager : MonoBehaviour
     [SerializeField] private List<GameObject> headModelPrefabs = null;
     [SerializeField] private List<GameObject> wingModelPrefabs = null;
     [SerializeField] private List<GameObject> pawsModelPrefabs = null;
+    [SerializeField] private List<GameObject> tailModelPrefabs = null;
 
     private Transform _currentBase = null;
-    private Transform _currentHead = null;
-    private Transform _currentWings = null;
-    private Transform _currentFPaws = null;
-    private Transform _currentBPaws = null;
+    private int _currentBaseIndex = 0;
+    private int _currentHeadIndex = 0;
+    private int _currentWingsIndex = 0;
+    private int _currentFPawsIndex = 0;
+    private int _currentBPawsIndex = 0;
+    private int _currentTailIndex = 0;
 
     void Start()
     {
-        MakeModel(0,0,0,0,0);
+        MakeModel(
+            _currentBaseIndex,
+            _currentHeadIndex,
+            _currentWingsIndex,
+            _currentFPawsIndex,
+            _currentBPawsIndex,
+            _currentTailIndex
+            );
     }
 
-    public void MakeModel(int baseIndex, int headIndex, int wingIndex, int fpawsIndex, int bpawsIndex)
+    public void MakeModel(int baseIndex, int headIndex, int wingIndex, int fpawsIndex, int bpawsIndex, int tailIndex)
     {
         ClearModel();
         if (baseIndex < baseModelPrefabs.Count && baseModelPrefabs.Count > 0)
         {
             _currentBase = Instantiate(baseModelPrefabs[baseIndex], target).transform;
+            _currentBaseIndex = baseIndex;
         }
 
         if (_currentBase && headIndex < headModelPrefabs.Count && headModelPrefabs.Count > 0)
         {
-            _currentHead = LocalInstanciate(_currentBase, headModelPrefabs[headIndex], "Head").transform;
+            LocalInstanciate(_currentBase, headModelPrefabs[headIndex], "Head");
+            _currentHeadIndex = headIndex;
         }
 
         if (_currentBase && wingIndex < wingModelPrefabs.Count && wingModelPrefabs.Count > 0)
         {
-            _currentWings = LocalInstanciate(_currentBase, wingModelPrefabs[wingIndex], "Wings").transform;
+            LocalInstanciate(_currentBase, wingModelPrefabs[wingIndex], "Wings");
+            _currentWingsIndex = wingIndex;
         }
 
         if (_currentBase && fpawsIndex < pawsModelPrefabs.Count && pawsModelPrefabs.Count > 0)
         {
-            _currentFPaws = LocalInstanciate(_currentBase, pawsModelPrefabs[fpawsIndex], "FPaws").transform;
+            LocalInstanciate(_currentBase, pawsModelPrefabs[fpawsIndex], "FPaws");
+            _currentFPawsIndex = fpawsIndex;
         }
 
         if (_currentBase && bpawsIndex < pawsModelPrefabs.Count && pawsModelPrefabs.Count > 0)
         {
-            _currentBPaws = LocalInstanciate(_currentBase, pawsModelPrefabs[bpawsIndex], "BPaws").transform;
+            LocalInstanciate(_currentBase, pawsModelPrefabs[bpawsIndex], "BPaws");
+            _currentBPawsIndex = bpawsIndex;
+        }
+
+        if (_currentBase && tailIndex < tailModelPrefabs.Count && tailModelPrefabs.Count > 0)
+        {
+            LocalInstanciate(_currentBase, tailModelPrefabs[tailIndex], "Tail");
+            _currentTailIndex = tailIndex;
         }
     }
 
@@ -56,9 +77,12 @@ public class GManager : MonoBehaviour
         foreach (Transform child in transform) {
             GameObject.Destroy(child.gameObject);
         }
-        _currentBase = null;
-        _currentHead = null;
-        _currentWings = null;
+        _currentBaseIndex = 0;
+        _currentHeadIndex = 0;
+        _currentWingsIndex = 0;
+        _currentFPawsIndex = 0;
+        _currentBPawsIndex = 0;
+        _currentTailIndex = 0;
     }
 
     void Update()

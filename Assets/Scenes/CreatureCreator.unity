@@ -1031,12 +1031,22 @@ MonoBehaviour:
   target: {fileID: 744503533}
   baseModelPrefabs:
   - {fileID: 919132149155446097, guid: 55f8665267db1324c9c65d5fb5a640a2, type: 3}
+  - {fileID: 919132149155446097, guid: c5a75ef0c0550e443920ddc6648d3f38, type: 3}
   headModelPrefabs:
   - {fileID: 919132149155446097, guid: c3d2559dfa4f0a24cad6e875d5e60acc, type: 3}
+  - {fileID: 919132149155446097, guid: d2b85a63aeb2ea247b2cab59b62e50f4, type: 3}
   wingModelPrefabs:
+  - {fileID: 919132149155446097, guid: e382a8d379d201f4e867bfe818dfb667, type: 3}
   - {fileID: 919132149155446097, guid: 18c0e5ab48d1b594e96fd90f4954e41c, type: 3}
   pawsModelPrefabs:
-  - {fileID: 919132149155446097, guid: b78525f4cc41faf42a784c0a39217b8f, type: 3}
+  - {fileID: 919132149155446097, guid: 1e5ba85870f60484cac13ad25205b901, type: 3}
+  - {fileID: 919132149155446097, guid: f15de783761a1054fb393660021a803a, type: 3}
+  - {fileID: 919132149155446097, guid: 55893a8fd65ab284982c63ad4ce4d212, type: 3}
+  - {fileID: 919132149155446097, guid: b93be683bff0c8e48977adea4087f4f6, type: 3}
+  tailModelPrefabs:
+  - {fileID: 919132149155446097, guid: 07ee96917672d6d4899d6879b850d593, type: 3}
+  - {fileID: 919132149155446097, guid: 2835f8def2629044c8ac363b99ab87ee, type: 3}
+  - {fileID: 919132149155446097, guid: 663470203a46cc54d97617e44f9fd67e, type: 3}
 --- !u!4 &1881159655
 Transform:
   m_ObjectHideFlags: 0
