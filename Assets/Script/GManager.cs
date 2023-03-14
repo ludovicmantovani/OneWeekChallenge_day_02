@@ -32,6 +32,78 @@ public class GManager : MonoBehaviour
             );
     }
 
+    private int GetNextIndex(int index, List<GameObject> prefabList)
+    {
+        int newindex = index + 1 < prefabList.Count ? index + 1 : 0;
+        return newindex;
+    }
+    public void NextBase()
+    {
+        MakeModel(
+            GetNextIndex(_currentBaseIndex, baseModelPrefabs),
+            _currentHeadIndex,
+            _currentWingsIndex,
+            _currentFPawsIndex,
+            _currentBPawsIndex,
+            _currentTailIndex);
+    }
+
+    public void NextHead()
+    {
+        MakeModel(
+            _currentBaseIndex,
+            GetNextIndex(_currentHeadIndex, headModelPrefabs),
+            _currentWingsIndex,
+            _currentFPawsIndex,
+            _currentBPawsIndex,
+            _currentTailIndex);
+    }
+
+    public void NextWings()
+    {
+        MakeModel(
+            _currentBaseIndex,
+            _currentHeadIndex,
+            GetNextIndex(_currentWingsIndex, wingModelPrefabs),
+            _currentFPawsIndex,
+            _currentBPawsIndex,
+            _currentTailIndex);
+    }
+
+    public void NextFpaws()
+    {
+        MakeModel(
+            _currentBaseIndex,
+            _currentHeadIndex,
+            _currentWingsIndex,
+            GetNextIndex(_currentFPawsIndex, pawsModelPrefabs),
+            _currentBPawsIndex,
+            _currentTailIndex);
+    }
+
+    public void NextBpaws()
+    {
+        MakeModel(
+            _currentBaseIndex,
+            _currentHeadIndex,
+            _currentWingsIndex,
+            _currentFPawsIndex,
+            GetNextIndex(_currentBPawsIndex, pawsModelPrefabs),
+            _currentTailIndex);
+    }
+
+    public void NextTail()
+    {
+        MakeModel(
+            _currentBaseIndex,
+            _currentHeadIndex,
+            _currentWingsIndex,
+            _currentFPawsIndex,
+            _currentBPawsIndex,
+            GetNextIndex(_currentTailIndex,
+            tailModelPrefabs));
+    }
+
     public void MakeModel(int baseIndex, int headIndex, int wingIndex, int fpawsIndex, int bpawsIndex, int tailIndex)
     {
         ClearModel();
@@ -74,7 +146,7 @@ public class GManager : MonoBehaviour
 
     private void ClearModel()
     {
-        foreach (Transform child in transform) {
+        foreach (Transform child in target.transform) {
             GameObject.Destroy(child.gameObject);
         }
         _currentBaseIndex = 0;
