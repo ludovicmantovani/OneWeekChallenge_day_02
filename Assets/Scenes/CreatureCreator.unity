@@ -409,8 +409,8 @@ MonoBehaviour:
   yMaxLimit: 80
   distanceMin: 2
   distanceMax: 5
-  zoomRate: 1
   smoothTime: 2
+  zoomSpeed: 5
 --- !u!1 &670946038
 GameObject:
   m_ObjectHideFlags: 0

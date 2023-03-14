@@ -5,15 +5,15 @@ using UnityEngine;
 public class OrbitControls : MonoBehaviour
 {
     [SerializeField] private Transform target;
-    [SerializeField] private float distance = 10.0f;
+    [SerializeField] private float distance = 5.0f;
     [SerializeField] private float xSpeed = 120.0f;
     [SerializeField] private float ySpeed = 120.0f;
     [SerializeField] private float yMinLimit = -20f;
     [SerializeField] private float yMaxLimit = 80f;
-    [SerializeField] private float distanceMin = .5f;
-    [SerializeField] private float distanceMax = 15f;
-    [SerializeField] private float zoomRate = 1f;
+    [SerializeField] private float distanceMin = 2f;
+    [SerializeField] private float distanceMax = 5f;
     [SerializeField] private float smoothTime = 2f;
+    [SerializeField] private float zoomSpeed = 5f;
 
     private Vector3 _position;
     private Quaternion _rotation;
@@ -82,11 +82,13 @@ public class OrbitControls : MonoBehaviour
         transform.rotation = _rotation;
 
         // zoom de la caméra molette souris
-        _desiredDistance -= Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * 100 * zoomRate * Mathf.Abs(_desiredDistance);
+        _desiredDistance -= Input.GetAxis("Mouse ScrollWheel") * zoomSpeed;
         _desiredDistance = Mathf.Clamp(_desiredDistance, distanceMin, distanceMax);
 
         // calculer position
-        _position = target.position - (_rotation * Vector3.forward * _desiredDistance + _positionOffset);
+        _currentDistance = Mathf.Lerp(_currentDistance, _desiredDistance, Time.deltaTime * smoothTime);
+        _position = target.position - (_rotation * Vector3.forward * _currentDistance + _positionOffset);
+
         transform.position = _position;
     }
 
