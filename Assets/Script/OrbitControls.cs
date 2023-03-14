@@ -20,11 +20,14 @@ public class OrbitControls : MonoBehaviour
 
     private float _xDeg = 0.0f;
     private float _yDeg = 0.0f;
+    private float _initXDeg = 0.0f;
+    private float _initYDeg = 0.0f;
     private float _currentDistance;
     private float _desiredDistance;
     private Quaternion _currentRotation;
     private Quaternion _desiredRotation;
     private Vector3 _positionOffset;
+    private Vector3 _initPosition;
 
     void Start()
     {
@@ -32,11 +35,15 @@ public class OrbitControls : MonoBehaviour
         _xDeg = angles.y;
         _yDeg = angles.x;
 
+        _initXDeg = _xDeg;
+        _initYDeg = _yDeg;
+
         _currentRotation = transform.rotation;
         _desiredRotation = transform.rotation;
 
         _position = transform.position;
         _positionOffset = _position - target.position;
+        _initPosition = new Vector3(_position.x, _position.y, _position.z);
 
         _currentDistance = distance;
         _desiredDistance = distance;
@@ -56,6 +63,11 @@ public class OrbitControls : MonoBehaviour
         {
             _xDeg += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
             _yDeg -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetPosition();
         }
 
         // limitation rotation verticale
@@ -86,5 +98,12 @@ public class OrbitControls : MonoBehaviour
         if (angle > 360)
             angle -= 360;
         return Mathf.Clamp(angle, min, max);
+    }
+
+    public void ResetPosition()
+    {
+        transform.position = _initPosition;
+        _xDeg = _initXDeg;
+        _yDeg = _initYDeg;
     }
 }
