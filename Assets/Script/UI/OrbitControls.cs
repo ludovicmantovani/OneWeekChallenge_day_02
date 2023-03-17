@@ -5,6 +5,8 @@ using UnityEngine;
 public class OrbitControls : MonoBehaviour
 {
     [SerializeField] private Transform target;
+    [SerializeField] private ShiftCamera camera;
+    [SerializeField] private float cameraShiftValue = -4.5f;
     [SerializeField] private bool lockPlayerControls = false;
     [SerializeField] private float distance = 5.0f;
     [SerializeField] private float xSpeed = 120.0f;
@@ -18,6 +20,7 @@ public class OrbitControls : MonoBehaviour
 
     private Vector3 _position;
     private Quaternion _rotation;
+    private bool _cameraIsShift = true;
 
     private float _xDeg = 0.0f;
     private float _yDeg = 0.0f;
@@ -111,5 +114,15 @@ public class OrbitControls : MonoBehaviour
         transform.position = _initPosition;
         _xDeg = _initXDeg;
         _yDeg = _initYDeg;
+    }
+
+    public void MakeShiftCamera()
+    {
+        if (camera)
+        {
+            if (_cameraIsShift) camera.Shift(cameraShiftValue * _currentDistance / 15);
+            else camera.Shift(0f);
+            _cameraIsShift = !_cameraIsShift;
+        }
     }
 }

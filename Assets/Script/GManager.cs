@@ -22,7 +22,7 @@ public class GManager : MonoBehaviour
 
     void Start()
     {
-        MakeModel(
+        float y = MakeModel(
             _currentBaseIndex,
             _currentHeadIndex,
             _currentWingsIndex,
@@ -30,6 +30,16 @@ public class GManager : MonoBehaviour
             _currentBPawsIndex,
             _currentTailIndex
             );
+        PoseCreature(y);
+    }
+
+    private void PoseCreature(float minY)
+    {
+        float delta = minY <= 0f ? -minY : minY;
+        target.position = new Vector3(
+            0,
+            delta,
+            0);
     }
 
     private int GetNextIndex(int index, List<GameObject> prefabList)
@@ -39,62 +49,67 @@ public class GManager : MonoBehaviour
     }
     public void NextBase()
     {
-        MakeModel(
+        float y = MakeModel(
             GetNextIndex(_currentBaseIndex, baseModelPrefabs),
             _currentHeadIndex,
             _currentWingsIndex,
             _currentFPawsIndex,
             _currentBPawsIndex,
             _currentTailIndex);
+        PoseCreature(y);
     }
 
     public void NextHead()
     {
-        MakeModel(
+        float y = MakeModel(
             _currentBaseIndex,
             GetNextIndex(_currentHeadIndex, headModelPrefabs),
             _currentWingsIndex,
             _currentFPawsIndex,
             _currentBPawsIndex,
             _currentTailIndex);
+        PoseCreature(y);
     }
 
     public void NextWings()
     {
-        MakeModel(
+        float y = MakeModel(
             _currentBaseIndex,
             _currentHeadIndex,
             GetNextIndex(_currentWingsIndex, wingModelPrefabs),
             _currentFPawsIndex,
             _currentBPawsIndex,
             _currentTailIndex);
+        PoseCreature(y);
     }
 
     public void NextFpaws()
     {
-        MakeModel(
+        float y = MakeModel(
             _currentBaseIndex,
             _currentHeadIndex,
             _currentWingsIndex,
             GetNextIndex(_currentFPawsIndex, pawsModelPrefabs),
             _currentBPawsIndex,
             _currentTailIndex);
+        PoseCreature(y);
     }
 
     public void NextBpaws()
     {
-        MakeModel(
+        float y = MakeModel(
             _currentBaseIndex,
             _currentHeadIndex,
             _currentWingsIndex,
             _currentFPawsIndex,
             GetNextIndex(_currentBPawsIndex, pawsModelPrefabs),
             _currentTailIndex);
+        PoseCreature(y);
     }
 
     public void NextTail()
     {
-        MakeModel(
+        float y = MakeModel(
             _currentBaseIndex,
             _currentHeadIndex,
             _currentWingsIndex,
@@ -102,46 +117,62 @@ public class GManager : MonoBehaviour
             _currentBPawsIndex,
             GetNextIndex(_currentTailIndex,
             tailModelPrefabs));
+        PoseCreature(y);
     }
 
-    public void MakeModel(int baseIndex, int headIndex, int wingIndex, int fpawsIndex, int bpawsIndex, int tailIndex)
+    public float MakeModel(int baseIndex, int headIndex, int wingIndex, int fpawsIndex, int bpawsIndex, int tailIndex)
     {
         ClearModel();
+        List<GameObject> go = new List<GameObject>();
+        Bounds bounds = new Bounds(Vector3.zero, Vector3.zero);
+        float minY = bounds.min.y;
+        Renderer renderer = null;
+
         if (baseIndex < baseModelPrefabs.Count && baseModelPrefabs.Count > 0)
         {
             _currentBase = Instantiate(baseModelPrefabs[baseIndex], target).transform;
             _currentBaseIndex = baseIndex;
+            go.Add(_currentBase.gameObject);
         }
 
         if (_currentBase && headIndex < headModelPrefabs.Count && headModelPrefabs.Count > 0)
         {
-            LocalInstanciate(_currentBase, headModelPrefabs[headIndex], "Head");
+            go.Add(LocalInstanciate(_currentBase, headModelPrefabs[headIndex], "Head"));
             _currentHeadIndex = headIndex;
         }
 
         if (_currentBase && wingIndex < wingModelPrefabs.Count && wingModelPrefabs.Count > 0)
         {
-            LocalInstanciate(_currentBase, wingModelPrefabs[wingIndex], "Wings");
+            go.Add(LocalInstanciate(_currentBase, wingModelPrefabs[wingIndex], "Wings"));
             _currentWingsIndex = wingIndex;
         }
 
         if (_currentBase && fpawsIndex < pawsModelPrefabs.Count && pawsModelPrefabs.Count > 0)
         {
-            LocalInstanciate(_currentBase, pawsModelPrefabs[fpawsIndex], "FPaws");
+            go.Add(LocalInstanciate(_currentBase, pawsModelPrefabs[fpawsIndex], "FPaws"));
             _currentFPawsIndex = fpawsIndex;
         }
 
         if (_currentBase && bpawsIndex < pawsModelPrefabs.Count && pawsModelPrefabs.Count > 0)
         {
-            LocalInstanciate(_currentBase, pawsModelPrefabs[bpawsIndex], "BPaws");
+            go.Add(LocalInstanciate(_currentBase, pawsModelPrefabs[bpawsIndex], "BPaws"));
             _currentBPawsIndex = bpawsIndex;
         }
 
         if (_currentBase && tailIndex < tailModelPrefabs.Count && tailModelPrefabs.Count > 0)
         {
-            LocalInstanciate(_currentBase, tailModelPrefabs[tailIndex], "Tail");
+            go.Add(LocalInstanciate(_currentBase, tailModelPrefabs[tailIndex], "Tail"));
             _currentTailIndex = tailIndex;
         }
+        foreach (GameObject g in go)
+        {
+            if (g.TryGetComponent<Renderer>(out renderer))
+            {
+                bounds.Encapsulate(renderer.bounds);
+                minY = bounds.min.y < minY ? bounds.min.y : minY;
+            }
+        }
+        return minY;
     }
 
     private void ClearModel()
@@ -155,6 +186,7 @@ public class GManager : MonoBehaviour
         _currentFPawsIndex = 0;
         _currentBPawsIndex = 0;
         _currentTailIndex = 0;
+        target.position = Vector3.zero;
     }
 
     void Update()
